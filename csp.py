@@ -1,23 +1,9 @@
-"""
-csp.py
-A tiny, readable CSP backtracking solver with MRV.
-
-We follow the class pseudocode structure:
-
-SELECT-UNASSIGNED-VARIABLE(A, X, C): pick var with minimum legal values (MRV)
-ORDER-DOMAIN-VALUES(X_i, A, D, C): return domain values in simple order
-CONSISTENT(X_i <- v, A, C): check constraints with current partial assignment
-BACKTRACK(A): depth-first search with backtracking
-
-This file is *generic* except for the 'legal_values_fn' and 'consistent_fn'
-which are provided by the problem (e.g., sudoku.py).
-"""
 
 from typing import Dict, List, Callable, Optional, Any
 
 
-Assignment = Dict[str, int]              # e.g., {"r1c1": 5, ...}
-DomainMap  = Dict[str, List[int]]        # e.g., {"r1c1": [1..9], "r1c2": [1..9], ...}
+Assignment = Dict[str, int]           
+DomainMap  = Dict[str, List[int]]      
 
 
 def select_unassigned_variable_mrv(
@@ -26,15 +12,13 @@ def select_unassigned_variable_mrv(
     domains: DomainMap,
     legal_values_fn: Callable[[str, Assignment], List[int]],
 ) -> str:
-    """
-    MRV: choose the unassigned variable with the fewest legal values (ties arbitrary).
-    """
+
     unassigned: List[str] = []
     for v in variables:
         if v not in assignment:
             unassigned.append(v)
 
-    # If everything is assigned, caller shouldn't ask for a variable — but be safe.
+
     if not unassigned:
         return ""
 
@@ -52,9 +36,7 @@ def select_unassigned_variable_mrv(
 
 
 def order_domain_values_simple(var: str, domains: DomainMap) -> List[int]:
-    """
-    Return values in the variable's domain as-is (no LCV here for simplicity).
-    """
+
     return list(domains[var])
 
 
@@ -64,9 +46,7 @@ def backtracking_search(
     consistent_fn: Callable[[str, int, Assignment], bool],
     legal_values_fn: Callable[[str, Assignment], List[int]],
 ) -> Optional[Assignment]:
-    """
-    Backtracking search with MRV, matching the class pseudocode structure.
-    """
+
     # Start with an empty partial assignment
     assignment: Assignment = {}
 
