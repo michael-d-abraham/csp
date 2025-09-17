@@ -1,0 +1,33 @@
+NAME: SEND+MORE=MONEY (strict, add10 primitives)
+DESC: Full column arithmetic via add10; unique solution 9567+1085=10652.
+
+VARS:
+  # Letters
+  S: [1,2,3,4,5,6,7,8,9]
+  E: [0,1,2,3,4,5,6,7,8,9]
+  N: [0,1,2,3,4,5,6,7,8,9]
+  D: [0,1,2,3,4,5,6,7,8,9]
+  M: [1]   # must be 1
+  O: [0,1,2,3,4,5,6,7,8,9]
+  R: [0,1,2,3,4,5,6,7,8,9]
+  Y: [0,1,2,3,4,5,6,7,8,9]
+
+  # Carries (binary)
+  C0: [0]
+  C1: [0,1]
+  C2: [0,1]
+  C3: [0,1]
+  C4: [0,1]
+
+CONS:
+  # distinct letters
+  alldiff(S,E,N,D,M,O,R,Y)
+
+  # Column-wise addition (right to left)
+  add10(D,E,C0 -> Y,C1)     # units
+  add10(N,R,C1 -> E,C2)     # tens
+  add10(E,O,C2 -> N,C3)     # hundreds
+  add10(S,M,C3 -> O,C4)     # thousands
+
+  # Leftmost column implies M == C4
+  eq(M,C4)
